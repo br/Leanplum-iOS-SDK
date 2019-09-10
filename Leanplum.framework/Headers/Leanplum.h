@@ -23,6 +23,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import <UserNotifications/UserNotifications.h>
 #import "LPInbox.h"
 #import "LPActionArg.h"
 #import "LPActionContext.h"
@@ -41,7 +42,7 @@
 #import "LeanplumCompatibility.h"
 #import "LPUIAlert.h"
 //#import "LPRequest.h"
-#import "JRSwizzle.h"
+#import "LPSwizzle.h"
 //#import "LeanplumInternal.h"
 #import "LPEventDataManager.h"
 #import "LPEventCallbackManager.h"
@@ -459,6 +460,23 @@ typedef void (^LeanplumMessageDisplayedCallbackBlock)(LPMessageArchiveData *mess
         "implement application:didReceiveRemoteNotification:fetchCompletionHandler: in your app "
         "delegate, you should remove any calls to [Leanplum handleNotification] and call the "
         "completion handler yourself.")));
+
++ (void)didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)token;
++ (void)didFailToRegisterForRemoteNotificationsWithError:(NSError *)error;
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#pragma clang diagnostic ignored "-Wstrict-prototypes"
++ (void)didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings;
+#pragma clang diagnostic pop
++ (void)didReceiveRemoteNotification:(NSDictionary *)userInfo;
++ (void)didReceiveRemoteNotification:(NSDictionary *)userInfo
+              fetchCompletionHandler:(LeanplumFetchCompletionBlock)completionHandler;
++ (void)didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler API_AVAILABLE(ios(10.0));
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#pragma clang diagnostic ignored "-Wstrict-prototypes"
++ (void)didReceiveLocalNotification:(UILocalNotification *)localNotification;
+#pragma clang diagnostic pop
 
 /**
  * Call this to handle custom actions for local notifications.
